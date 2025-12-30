@@ -26,12 +26,9 @@
         html = ["prettier"];
         json = ["prettier"];
         lua = ["stylua"];
-        markdown = ["prettier"];
         nix = ["alejandra"];
-        #ruby = ["rubyfmt"];
         terraform = ["tofu_fmt"];
         tf = ["tofu_fmt"];
-        #yaml = ["yamlfmt"]; # NOTE: Does not accept empty lines after keys
         yaml = ["prettier"];
       };
     };
@@ -88,7 +85,6 @@
             [vim.diagnostic.severity.ERROR] = "✘",
             [vim.diagnostic.severity.WARN]  = "▲",
             [vim.diagnostic.severity.HINT]  = "⚑",
-            [vim.diagnostic.severity.INFO]  = "",
           }
         },
         virtual_text = true,
@@ -98,7 +94,7 @@
     '';
     servers = {
       pylsp = {
-        # NOTE: Trouebleshooting this!
+        # NOTE: Troubleshooting this!
         enable = false;
         settings.plugins = {
           black.enabled = true;
@@ -124,7 +120,6 @@
       bashls.enable = true; # Bash
       yamlls.enable = true; # YAML
       terraformls.enable = true; # Terraform
-      # ansiblels.enable = true; #Ansible - using yamlls instead
       nginx_language_server.enable = true; # Nginx
     };
   };
@@ -292,14 +287,11 @@
     lintersByFt = {
       text = ["vale"];
       json = ["jsonlint"];
-      markdown = ["prettier"];
-      #ruby = ["rubyfmt"];
       dockerfile = ["hadolint"];
       terraform = ["tofu_fmt"];
       tf = ["tofu_fmt"];
       bash = ["shellcheck"];
       yaml = ["yamlfmt"];
-      nix = ["alejandra"];
       go = ["golangci-lint"];
       python = ["flake8"];
       haskell = ["hlint"];

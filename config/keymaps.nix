@@ -449,14 +449,12 @@
         vim.opt.number = false
         vim.opt.relativenumber = false
         vim.diagnostic.hide()
-        vim.cmd("IBLDisable")
         vim.notify("Line numbers and diagnostics hidden", "info")
       else
         -- Show line numbers and diagnostics
         vim.opt.number = true
         vim.opt.relativenumber = true
         vim.diagnostic.show()
-        vim.cmd("IBLEnable")
         vim.notify("Line numbers and diagnostics shown", "info")
       end
 

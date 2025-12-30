@@ -16,6 +16,9 @@
           follow_current_file = {
             enabled = true;
           };
+          filtered_items = {
+            visible = true;
+          };
         };
 
         default_component_configs = {
@@ -25,19 +28,35 @@
             expander_expanded = "󰅀";
             expander_highlight = "NeoTreeExpander";
           };
-
+          name = {
+            use_git_status_colors = false;
+          };
           git_status = {
+            highlight = false;
             symbols = {
-              added = " ";
-              conflict = "󰩌 ";
-              deleted = "󱂥";
-              ignored = " ";
-              modified = " ";
+              added = "󰐕";
+              modified = "󰏫";
+              deleted = "󰍵";
               renamed = "󰑕";
               staged = "󰩍";
-              unstaged = "";
-              untracked = " ";
+              conflict = "󰩌 ";
+              ignored = " ";
+
+              untracked = "󰞋";
+              unstaged = "󰄱";
             };
+
+            #              symbols = {
+            #              added = " ";
+            #              conflict = "󰩌 ";
+            #              deleted = "󱂥";
+            #              ignored = " ";
+            #              modified = " ";
+            #              renamed = "󰑕";
+            #              staged = "󰩍";
+            #              unstaged = "";
+            #              untracked = "✗";
+            #            };
           };
         };
       };
@@ -78,28 +97,34 @@
       };
     };
 
-    toggleterm = {
-      enable = true;
-      settings.float_opts.border = "curved";
-    };
-
     treesitter = {
       enable = true;
       settings.indent.enable = true;
     };
+
     # NOTE: This is annoying using the corne keyboard
     nvim-autopairs.enable = false;
 
-    indent-blankline = {
-      enable = true;
-      settings = {
-        scope = {
-          show_end = true;
-          show_exact_scope = true;
-          show_start = true;
-        };
-      };
-    };
+    #indent-blankline = {
+    #  enable = true;
+    #  settings = {
+    #    whitespace = {
+    #      highlight = {
+    #        "Function";
+    #        };
+    #        remove_blankline_trail = true;
+    #      };
+
+    #      indent = {
+    #        char = "│";
+    #      };
+    #      scope = {
+    #        show_end = false;
+    #        show_exact_scope = true;
+    #        show_start = false;
+    #      };
+    #    };
+    #  };
 
     telescope.enable = true;
 
@@ -113,7 +138,10 @@
     colorizer.settings = {
       enable = true;
       userDefaultOptions.names = false;
-      filetypes = ["css" "scss"];
+      filetypes = [
+        "css"
+        "scss"
+      ];
     };
 
     image.enable = true;

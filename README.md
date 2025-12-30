@@ -14,11 +14,13 @@
 ### Installation
 
 #### Run it
+
 ```nix
 nix run github:caspersonn/nixvim
 ```
 
 #### Clone
+
 ```nix
 git clone https://github.com/caspersonn/nixvim
 nix run .
@@ -49,9 +51,10 @@ home-manager.users.<user>.home.packages = [
     inputs.nixvim.packages.x86_64-linux.default
 ];
 ```
+
 #### My favorite method in non-NixOS systems
-Requires [Nix package manager](https://nixos.org/download/#download-nix
-)
+
+Requires [Nix package manager](https://nixos.org/download/#download-nix)
 
 ```nix
 alias vim='nix run github:caspersonn/nixvim'
@@ -86,4 +89,4 @@ https://github.com/caspersonn/sysbofh
 
 ### TODO
 
-* Write a decent and useful TODO
+- Write a decent and useful TODO
