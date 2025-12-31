@@ -5,9 +5,7 @@
 
   # Common packages for all systems
   commonPackages = with pkgs; [
-    # Required by telescope live grep
     ripgrep
-    # Required by CMP and formatters
     alejandra
     nixpkgs-fmt
     prettierd
@@ -20,7 +18,6 @@
     black
     isort
     hadolint
-    #rubyfmt
     shfmt
   ];
 
@@ -35,19 +32,6 @@
     # macOS uses pbcopy/pbpaste for clipboard, which is built-in
   ];
 in {
-  imports = [
-    ./themes/gruvbox.nix
-    ./plugs/lsp.nix
-    ./plugs/ui.nix
-    ./plugs/cmp.nix
-    ./options.nix
-    ./keymaps.nix
-    ./plugs/alpha.nix
-    ./plugs/lspsaga.nix
-    ./plugs/lualine.nix
-  ];
-  # globals.mapleader = " "; # defined in keymaps module
-
   extraPackages =
     commonPackages
     ++ (

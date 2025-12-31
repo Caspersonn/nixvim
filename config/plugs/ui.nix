@@ -99,7 +99,30 @@
 
     treesitter = {
       enable = true;
-      settings.indent.enable = true;
+      settings = {
+        indent.enable = true;
+        auto_install = true;
+        disable = [
+          "c"
+        ];
+        highlight = {
+          enable = true;
+        };
+        ensure_installed = [
+          "markdown"
+          "lua"
+          "vim"
+          "vimdoc"
+          "nix"
+          "elixir"
+          "eex"
+          "heex"
+        ];
+      };
+    };
+
+    treesitter-textobjects = {
+      enable = true;
     };
 
     # NOTE: This is annoying using the corne keyboard
