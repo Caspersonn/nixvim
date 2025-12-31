@@ -288,7 +288,6 @@
       text = ["vale"];
       json = ["jsonlint"];
       dockerfile = ["hadolint"];
-      terraform = ["tofu_fmt"];
       tf = ["tofu_fmt"];
       bash = ["shellcheck"];
       yaml = ["yamlfmt"];
