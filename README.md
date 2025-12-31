@@ -1,15 +1,12 @@
 <h1 id="header" align="center">
     <img src="https://github.com/nix-community/nixvim/blob/main/assets/nixvim_logo.svg" width="25%" />
    <br>
- sysBOFH NixVim
+ Casper NixVim
 </h1>
 
 #### This is my functional, minimalist, and carefully curated collection of essential plugins, paired with a clean and simple configuration for [NixVim](https://nix-community.github.io/nixvim/).
 
 ---
-
-![BOFH01](./assets/BOFH_01.png)
-![BOFH02](./assets/BOFH_02.png)
 
 ### Installation
 
