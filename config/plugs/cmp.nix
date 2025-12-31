@@ -28,18 +28,7 @@
         "<Right>" = "cmp.mapping.confirm({ select = true })";
       };
     };
-    lsp-format.enable = true;
-    none-ls = {
-      enable = true;
-      enableLspFormat = true;
-      sources.formatting = {
-        alejandra.enable = true;
-        nixpkgs_fmt.enable = true;
-        prettier.enable = true;
-        prettierd.enable = true;
-        stylua.enable = true;
-      };
-    };
+    lsp-format.enable = false;
   };
 
   extraConfigLua = ''
