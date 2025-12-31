@@ -3,36 +3,32 @@
   pkgs,
   ...
 }: {
-  #plugins.conform-nvim = {
-  #  enable = true;
-  #  settings = {
-  #    format_on_save = {
-  #      lsp_fallback = "never";
-  #      timeout_ms = 500;
-  #    };
-  #    notify_on_error = true;
+  plugins.conform-nvim = {
+    enable = true;
+    settings = {
+      notify_on_error = true;
 
-  #    formatters_by_ft = {
-  #      sh = [
-  #        "shellcheck"
-  #        "shfmt"
-  #      ];
-  #      python = [
-  #        "isort"
-  #        "black"
-  #      ];
-  #      docker = ["hadolint"];
-  #      css = ["prettier"];
-  #      html = ["prettier"];
-  #      json = ["prettier"];
-  #      lua = ["stylua"];
-  #      nix = ["alejandra"];
-  #      terraform = ["tofu_fmt"];
-  #      tf = ["tofu_fmt"];
-  #      yaml = ["prettier"];
-  #    };
-  #  };
-  #};
+      formatters_by_ft = {
+        sh = [
+          "shellcheck"
+          "shfmt"
+        ];
+        python = [
+          "isort"
+          "black"
+        ];
+        docker = ["hadolint"];
+        css = ["prettier"];
+        html = ["prettier"];
+        json = ["prettier"];
+        lua = ["stylua"];
+        nix = ["alejandra"];
+        terraform = ["tofu_fmt"];
+        tf = ["tofu_fmt"];
+        yaml = ["prettier"];
+      };
+    };
+  };
 
   plugins.lsp = {
     enable = true;
