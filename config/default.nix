@@ -13,12 +13,14 @@
     stylua
     python312Packages.flake8
     vimPlugins.vim-prettier
+    vimPlugins.teamtype
     python312Packages.autopep8
     yapf
     black
     isort
     hadolint
     shfmt
+    yamlfmt
   ];
 
   # Linux-specific packages

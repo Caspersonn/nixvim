@@ -45,18 +45,6 @@
               untracked = "󰞋";
               unstaged = "󰄱";
             };
-
-            #              symbols = {
-            #              added = " ";
-            #              conflict = "󰩌 ";
-            #              deleted = "󱂥";
-            #              ignored = " ";
-            #              modified = " ";
-            #              renamed = "󰑕";
-            #              staged = "󰩍";
-            #              unstaged = "";
-            #              untracked = "✗";
-            #            };
           };
         };
       };
