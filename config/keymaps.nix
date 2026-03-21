@@ -30,6 +30,14 @@
       options.desc = "Format with Alejandra";
     }
 
+    {
+      key = "<Leader>xa";
+      action = ":%!alejandra -qq<CR>";
+      mode = "n";
+      options.desc = "Format with Alejandra";
+    }
+
+
     # Notify dismiss all
     {
       key = "<Leader>nn";
@@ -337,6 +345,12 @@
       mode = "n";
       options.desc = "TODO telescope";
     }
+    {
+      key = "<Leader>cp";
+      action = "<cmd>let @+ = expand('%:p')<CR>";
+      mode = "n";
+      options.desc = "Copy current file path";
+    }
   ];
 
   plugins.which-key = {
@@ -408,8 +422,8 @@
         }
         {
           __unkeyed-1 = "<Leader>c";
-          group = "Copilot";
-          icon = "";
+          group = "Copy";
+          #icon = "";
         }
 
         {
