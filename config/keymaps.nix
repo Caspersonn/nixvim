@@ -490,5 +490,182 @@
          end
        end
 
+           local function heading_level(line)
+             local hashes = line:match("^(#+)%s+")
+             return hashes and #hashes or nil
+           end
+
+           local function section_base_title(line)
+             local title = line:match("^##%s+(.+)$")
+             if not title then
+               return nil
+             end
+
+             title = title:gsub("%s*%(%d+/%d+ completed%)%s*$", "")
+             return title
+           end
+
+           local function parse_task_line(line)
+             local indent, state = line:match("^(%s*)[-*+] %[(.)%]")
+             if not indent then
+               return nil
+             end
+
+             -- Only standard Markdown task states
+             if state ~= " " and state ~= "x" and state ~= "X" then
+               return nil
+             end
+
+             return {
+               indent = #indent,
+               state = state,
+             }
+           end
+
+           local function is_leaf_task(lines, idx, section_end)
+             local current = parse_task_line(lines[idx])
+             if not current then
+               return false
+             end
+
+             for j = idx + 1, section_end do
+               local lvl = heading_level(lines[j])
+               if lvl and lvl <= 2 then
+                 break
+               end
+
+               local next_task = parse_task_line(lines[j])
+               if next_task then
+                 if next_task.indent <= current.indent then
+                   -- sibling or parent-level task: current task has no child tasks
+                   break
+                 else
+                   -- deeper task under current => current is a parent container
+                   return false
+                 end
+               end
+             end
+
+             return true
+           end
+
+           local function find_section_end(lines, start_idx)
+             for i = start_idx + 1, #lines do
+               local lvl = heading_level(lines[i])
+               if lvl and lvl <= 2 then
+                 return i - 1
+               end
+             end
+             return #lines
+           end
+
+           local function count_tasks_in_section(lines, start_idx)
+             local done = 0
+             local total = 0
+             local section_end = find_section_end(lines, start_idx)
+
+             for i = start_idx + 1, section_end do
+               local task = parse_task_line(lines[i])
+               if task and is_leaf_task(lines, i, section_end) then
+                 total = total + 1
+                 if task.state == "x" or task.state == "X" then
+                   done = done + 1
+                 end
+               end
+             end
+
+             return done, total
+           end
+
+           local function update_week_trackers(bufnr)
+             bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+             if vim.b[bufnr].week_tracker_updating then
+               return
+             end
+
+             local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+             local changed = false
+
+             vim.b[bufnr].week_tracker_updating = true
+
+             for i, line in ipairs(lines) do
+               local title = section_base_title(line)
+
+               if title == "Carry-over" or title == "Committed this week" or title == "Commited this week" then
+                 local canonical = (title == "Carry-over") and "Carry-over" or "Committed this week"
+                 local done, total = count_tasks_in_section(lines, i)
+                 local new_line = string.format("## %s (%d/%d completed)", canonical, done, total)
+
+                 if lines[i] ~= new_line then
+                   lines[i] = new_line
+                   changed = true
+                 end
+               end
+             end
+
+             if changed then
+               vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+             end
+
+             vim.b[bufnr].week_tracker_updating = false
+           end
+           local function insert_week_heading(offset_weeks)
+             offset_weeks = offset_weeks or 0
+
+             local now = os.time() + (offset_weeks * 7 * 24 * 60 * 60)
+
+             local iso_year = vim.fn.strftime("%G", now)
+             local iso_week = vim.fn.strftime("%V", now)
+             local weekday = tonumber(vim.fn.strftime("%u", now)) -- 1 = Monday, 7 = Sunday
+
+             local monday = now - ((weekday - 1) * 24 * 60 * 60)
+             local sunday = monday + (6 * 24 * 60 * 60)
+
+             local template = {
+               string.format(
+                 "# %s-W%s (%s > %s)",
+                 iso_year,
+                 iso_week,
+                 vim.fn.strftime("%Y-%m-%d", monday),
+                 vim.fn.strftime("%Y-%m-%d", sunday)
+               ),
+               "",
+               "## Carry-over (0/0 completed)",
+               "",
+               "## Committed this week (0/0 completed)",
+               "",
+             }
+
+             vim.api.nvim_put(template, "l", true, true)
+             update_week_trackers(0)
+           end
+
+           vim.keymap.set("n", "<leader>ww", function()
+             insert_week_heading(0)
+           end, { desc = "Insert current ISO week heading" })
+
+           vim.keymap.set("n", "<leader>wn", function()
+             insert_week_heading(1)
+           end, { desc = "Insert next ISO week heading" })
+
+           vim.api.nvim_create_user_command("WeekHeading", function(opts)
+             local offset = tonumber(opts.args) or 0
+             insert_week_heading(offset)
+           end, { nargs = "?" })
+
+           vim.api.nvim_create_user_command("WeekTrackerRefresh", function()
+             update_week_trackers(0)
+           end, { desc = "Refresh weekly progress trackers" })
+
+           local week_tracker_group = vim.api.nvim_create_augroup("WeekPlanningTracker", { clear = true })
+
+           vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave", "TextChanged", "TextChangedI", "BufWritePost" }, {
+             group = week_tracker_group,
+             pattern = "*.md",
+             callback = function(args)
+               update_week_trackers(args.buf)
+             end,
+           })
   '';
 }
