@@ -6,6 +6,7 @@
   # Common packages for all systems
   commonPackages = with pkgs; [
     ripgrep
+    sc-im
     alejandra
     nixpkgs-fmt
     prettierd
