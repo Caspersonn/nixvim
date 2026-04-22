@@ -155,7 +155,7 @@
       ];
     };
 
-    image.enable = true;
+    image.enable = false;
     noice.enable = true;
     web-devicons.enable = true;
   };
