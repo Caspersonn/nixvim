@@ -105,7 +105,7 @@
           yapf.enabled = true;
         };
       };
-      lua_ls.enable = true; # Lua
+      lua_ls.enable = false; # Lua
       cssls.enable = true; # CSS
       html.enable = true; # HTML
       pyright.enable = true; # Python
