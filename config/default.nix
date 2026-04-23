@@ -22,6 +22,7 @@
     hadolint
     shfmt
     yamlfmt
+    nil
   ];
 
   # Linux-specific packages
