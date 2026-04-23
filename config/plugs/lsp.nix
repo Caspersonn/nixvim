@@ -117,6 +117,7 @@
       yamlls.enable = true; # YAML
       terraformls.enable = true; # Terraform
       nginx_language_server.enable = true; # Nginx
+      ts_ls.enable = true;
     };
   };
 

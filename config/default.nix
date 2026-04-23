@@ -22,7 +22,12 @@
     hadolint
     shfmt
     yamlfmt
+<<<<<<< Updated upstream
     nil
+=======
+    typescript-language-server
+    typescript
+>>>>>>> Stashed changes
   ];
 
   # Linux-specific packages
