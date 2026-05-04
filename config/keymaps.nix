@@ -348,7 +348,7 @@
 
     {
       key = "<Leader>cl";
-      action = "<cmd>let @+ = expand('%') . ':' . line(".")<CR>";
+      action = "<cmd>let @+ = expand('%') . ':' . line('.')<CR>";
       mode = "n";
       options.desc = "Copy current file path with line number";
     }
