@@ -345,6 +345,14 @@
       mode = "n";
       options.desc = "TODO telescope";
     }
+
+    {
+      key = "<Leader>cl";
+      action = "<cmd>let @+ = expand('%') . ':' . line(".")<CR>";
+      mode = "n";
+      options.desc = "Copy current file path with line number";
+    }
+
     {
       key = "<Leader>cp";
       action = "<cmd>let @+ = expand('%:p')<CR>";
