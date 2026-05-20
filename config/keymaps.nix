@@ -179,12 +179,42 @@
 
     # Buffer tabs
     {
-      key = "<leader>b";
+      key = "<leader>ba";
       action = "<cmd> enew <CR>";
       mode = "n";
       options = {
         silent = true;
         desc = "New buffer";
+      };
+    }
+
+    {
+      key = "<leader>bn";
+      action = "<cmd> bn <CR>";
+      mode = "n";
+      options = {
+        silent = true;
+        desc = "Next Buffer";
+      };
+    }
+
+    {
+      key = "<leader>bp";
+      action = "<cmd> bp <CR>";
+      mode = "n";
+      options = {
+        silent = true;
+        desc = "Previous Buffer";
+      };
+    }
+
+    {
+      key = "<leader>bk";
+      action = "<cmd> bdelete <CR>";
+      mode = "n";
+      options = {
+        silent = true;
+        desc = "Kill all buffers";
       };
     }
 
