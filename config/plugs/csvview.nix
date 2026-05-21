@@ -1,7 +1,7 @@
 {
   plugins.csvview = {
     enable = true;
-    autoload = true;
+    autoLoad = true;
     settings = {
       parser = {
         async_chunksize = 30;
