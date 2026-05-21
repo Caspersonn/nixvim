@@ -16,7 +16,7 @@
 
   autoCmd = [
     {
-      event = ["BufEnter" "BufWinEnter"];
+      event = ["BufEnter"];
       pattern = ["*.csv"];
       command = "CsvViewEnable";
     }
