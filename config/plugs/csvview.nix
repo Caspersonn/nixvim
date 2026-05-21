@@ -13,4 +13,12 @@
       };
     };
   };
+
+  autoCmd = [
+    {
+      event = ["BufEnter" "BufWinEnter"];
+      pattern = ["*.csv"];
+      command = "CsvViewEnable";
+    }
+  ];
 }
