@@ -1,7 +1,13 @@
 {
   plugins.csvview = {
     enable = true;
-    autoLoad = false;
+    lazyLoad = {
+      enable = true;
+      settings = {
+        ft = "csv";
+        cmd = "CsvViewEnable";
+      };
+    };
     settings = {
       parser = {
         async_chunksize = 30;
