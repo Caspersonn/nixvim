@@ -23,9 +23,14 @@
         json = ["prettier"];
         lua = ["stylua"];
         nix = ["alejandra"];
+        hcl = ["hclfmt"];
+        sql = ["sqlformat"];
         terraform = ["tofu_fmt"];
         tf = ["tofu_fmt"];
-        yaml = ["prettier"];
+        yaml = [
+          "prettier"
+          "yamlfmt"
+        ];
       };
     };
   };
@@ -121,8 +126,24 @@
     };
   };
 
+  plugins.luasnip = {
+    enable = true;
+    lazyLoad = {
+      enable = true;
+      settings = {
+        event = ["InsertEnter"];
+      };
+    };
+  };
+
   plugins.cmp = {
     enable = true;
+    lazyLoad = {
+      enable = true;
+      settings = {
+        event = ["InsertEnter"];
+      };
+    };
     settings = {
       autoEnableSources = true;
       performance = {
@@ -262,34 +283,17 @@
     settings = {};
   };
 
-  plugins.none-ls = {
-    enable = true;
-    sources.formatting = {
-      black.enable = true;
-      alejandra.enable = false;
-      hclfmt.enable = true;
-      opentofu_fmt.enable = false;
-      prettier.enable = false;
-      sqlformat.enable = true;
-      stylua.enable = true;
-      yamlfmt.enable = true;
-    };
-    sources.diagnostics = {
-      trivy.enable = true;
-      yamllint.enable = true;
-      opentofu_validate.enable = true;
-    };
-  };
 
   plugins.lint = {
     enable = true;
     lintersByFt = {
+      yaml = ["yamllint"];
+      dockerfile = ["trivy"];
+      terraform = ["trivy"];
+      tf = ["opentofu_validate"];
       #text = ["vale"];
       #json = ["jsonlint"];
-      #dockerfile = ["hadolint"];
-      #tf = ["tofu_fmt"];
       #bash = ["shellcheck"];
-      #yaml = ["yamlfmt"];
       #go = ["golangci-lint"];
       #python = ["flake8"];
       #haskell = ["hlint"];

@@ -1,5 +1,7 @@
 {
   plugins = {
+    lz-n.enable = true;
+
     neo-tree = {
       enable = true;
       settings = {
@@ -89,7 +91,7 @@
       enable = true;
       settings = {
         indent.enable = true;
-        auto_install = true;
+        auto_install = false;
         disable = [
           "c"
         ];
