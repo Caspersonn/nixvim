@@ -138,12 +138,6 @@
 
   plugins.cmp = {
     enable = true;
-    lazyLoad = {
-      enable = true;
-      settings = {
-        event = ["InsertEnter"];
-      };
-    };
     settings = {
       autoEnableSources = true;
       performance = {
@@ -273,34 +267,10 @@
     };
   };
 
-  plugins.cmp-nvim-lsp = {
-    enable = true;
-    lazyLoad = {
-      enable = true;
-      settings.event = ["InsertEnter"];
-    };
-  };
-  plugins.cmp-buffer = {
-    enable = true;
-    lazyLoad = {
-      enable = true;
-      settings.event = ["InsertEnter"];
-    };
-  };
-  plugins.cmp-path = {
-    enable = true;
-    lazyLoad = {
-      enable = true;
-      settings.event = ["InsertEnter"];
-    };
-  };
-  plugins.cmp-treesitter = {
-    enable = true;
-    lazyLoad = {
-      enable = true;
-      settings.event = ["InsertEnter"];
-    };
-  };
+  plugins.cmp-nvim-lsp.enable = true;
+  plugins.cmp-buffer.enable = true;
+  plugins.cmp-path.enable = true;
+  plugins.cmp-treesitter.enable = true;
   plugins.dap.enable = true;
   plugins.trouble = {
     enable = true;

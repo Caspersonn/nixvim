@@ -2,13 +2,7 @@
   plugins = {
     lspkind.enable = true;
 
-    cmp-nvim-lsp-signature-help = {
-      enable = true;
-      lazyLoad = {
-        enable = true;
-        settings.event = ["InsertEnter"];
-      };
-    };
+    cmp-nvim-lsp-signature-help.enable = true;
     cmp = {
       enable = true;
       settings.sources = [
