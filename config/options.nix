@@ -34,8 +34,7 @@
     # Only enable wl-copy on Linux systems
     clipboard.providers.wl-copy.enable = pkgs.stdenv.isLinux;
     extraConfigLua = ''
-      vim.opt.mouse=""
-
+      vim.opt.mouse="a"
     '';
   };
 }
