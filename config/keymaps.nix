@@ -376,6 +376,7 @@
       options.desc = "TODO telescope";
     }
 
+    # Copy actions
     {
       key = "<Leader>cl";
       action = "<cmd>let @+ = expand('%') . ':' . line('.')<CR>";
@@ -389,6 +390,15 @@
       mode = "n";
       options.desc = "Copy current file path";
     }
+
+    # Linny
+    {
+      key = "<Leader>lt";
+      action = "<cmd>LinnyMenuToggle<CR>";
+      mode = "n";
+      options.desc = "Toggle Linny menu";
+    }
+
   ];
 
   plugins.which-key = {
