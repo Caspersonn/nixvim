@@ -485,6 +485,12 @@
           group = "Utils";
           icon = "";
         }
+
+        {
+          __unkeyed-1 = "<Leader>w";
+          group = "Week";
+          icon = "󰸗";
+        }
       ];
     };
   };
@@ -715,5 +721,200 @@
                update_week_trackers(args.buf)
              end,
            })
+
+           -- Move open tasks to next week's Carry-over.
+           -- Weeks are sorted newest-first, so "next week" is the nearest week
+           -- heading above the selection; it is created when it doesn't exist yet.
+           local function insert_block(tbl, pos, block)
+             for k = #block, 1, -1 do
+               table.insert(tbl, pos, block[k])
+             end
+           end
+
+           local function week_section_end(lines, start_idx)
+             for i = start_idx + 1, #lines do
+               if heading_level(lines[i]) == 1 then
+                 return i - 1
+               end
+             end
+             return #lines
+           end
+
+           local function next_week_template(monday_str)
+             local y, m, d = monday_str:match("^(%d+)%-(%d+)%-(%d+)$")
+             local next_mon = os.time({ year = tonumber(y), month = tonumber(m), day = tonumber(d), hour = 12 })
+               + 7 * 24 * 60 * 60
+             local next_sun = next_mon + 6 * 24 * 60 * 60
+             local name = string.format("%s-W%s", vim.fn.strftime("%G", next_mon), vim.fn.strftime("%V", next_mon))
+             return {
+               string.format(
+                 "# %s (%s > %s)",
+                 name,
+                 vim.fn.strftime("%Y-%m-%d", next_mon),
+                 vim.fn.strftime("%Y-%m-%d", next_sun)
+               ),
+               "",
+               "## Carry-over (0/0 completed)",
+               "",
+               "## Committed this week (0/0 completed)",
+               "",
+             }, name
+           end
+
+           -- Project group label lines look like "- ImprovementIt" (bullet, no checkbox)
+           local function group_label(line)
+             local label = line:match("^[-*+] ([^%s%[].*)$")
+             return label and label:gsub("%s+$", "") or nil
+           end
+
+           local function week_move_tasks(start_line, end_line)
+             local bufnr = vim.api.nvim_get_current_buf()
+             local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+             -- Week heading the selection belongs to
+             local src_idx, src_week, src_monday
+             for i = math.min(start_line, #lines), 1, -1 do
+               local wk, mon = lines[i]:match("^# %d+%-W(%d+) %((%d%d%d%d%-%d%d%-%d%d)")
+               if wk then
+                 src_idx, src_week, src_monday = i, wk, mon
+                 break
+               end
+             end
+             if not src_idx then
+               vim.notify("No 'YYYY-Www (...)' week heading found above the selection", vim.log.levels.ERROR)
+               return
+             end
+
+             -- Open tasks in the selection, each with its project group label.
+             -- Tasks that already carry a (W..) tag keep their original origin week.
+             local src_end = week_section_end(lines, src_idx)
+             local tasks = {}
+             for i = start_line, math.min(end_line, src_end) do
+               local state = lines[i]:match("^%s*[-*+] %[(.)%]")
+               if state == " " then
+                 local group
+                 for j = i - 1, src_idx + 1, -1 do
+                   if heading_level(lines[j]) then
+                     break
+                   end
+                   group = group_label(lines[j])
+                   if group then
+                     break
+                   end
+                 end
+                 local text = lines[i]
+                 if not text:match("%(W%d+%)") then
+                   text = text .. " (W" .. src_week .. ")"
+                 end
+                 table.insert(tasks, { idx = i, group = group, text = text })
+               end
+             end
+             if #tasks == 0 then
+               vim.notify("No open '[ ]' tasks in selection", vim.log.levels.WARN)
+               return
+             end
+
+             -- Target week: nearest week heading above; create it when the
+             -- selection is in the newest week. `shift` tracks how many lines
+             -- get inserted above the source so it can be re-indexed later.
+             local shift = 0
+             local tgt_idx, tgt_name
+             for i = src_idx - 1, 1, -1 do
+               if lines[i]:match("^# %d+%-W%d+ %(") then
+                 tgt_idx = i
+                 tgt_name = lines[i]:match("^# (%S+)")
+                 break
+               end
+             end
+             if not tgt_idx then
+               local template, name = next_week_template(src_monday)
+               insert_block(lines, src_idx, template)
+               tgt_idx, tgt_name = src_idx, name
+               shift = shift + #template
+             end
+
+             -- Carry-over section of the target week; create it when missing
+             local carry_idx
+             for i = tgt_idx + 1, week_section_end(lines, tgt_idx) do
+               if section_base_title(lines[i]) == "Carry-over" then
+                 carry_idx = i
+                 break
+               end
+             end
+             if not carry_idx then
+               insert_block(lines, tgt_idx + 1, { "", "## Carry-over (0/0 completed)" })
+               carry_idx = tgt_idx + 2
+               shift = shift + 2
+             end
+             local carry_end = find_section_end(lines, carry_idx)
+
+             -- Bucket tasks per group, preserving selection order
+             local order, buckets = {}, {}
+             for _, t in ipairs(tasks) do
+               local key = t.group or ""
+               if not buckets[key] then
+                 buckets[key] = { group = t.group, items = {} }
+                 table.insert(order, key)
+               end
+               table.insert(buckets[key].items, t.text)
+             end
+
+             for _, key in ipairs(order) do
+               local bucket = buckets[key]
+               local block = bucket.items
+               local pos
+
+               -- Group already present in Carry-over: append after its last task
+               if bucket.group then
+                 for i = carry_idx + 1, carry_end do
+                   if group_label(lines[i]) == bucket.group then
+                     pos = i + 1
+                     while pos <= carry_end and (lines[pos]:match("^%s*[-*+] %[.%]") or lines[pos]:match("^%s+%S")) do
+                       pos = pos + 1
+                     end
+                     break
+                   end
+                 end
+               end
+
+               -- Otherwise append group and tasks at the end of the section
+               if not pos then
+                 local last = carry_idx
+                 for i = carry_idx + 1, carry_end do
+                   if lines[i]:match("%S") then
+                     last = i
+                   end
+                 end
+                 pos = last + 1
+                 block = { "" }
+                 if bucket.group then
+                   table.insert(block, "- " .. bucket.group)
+                 end
+                 for _, item in ipairs(bucket.items) do
+                   table.insert(block, item)
+                 end
+               end
+
+               insert_block(lines, pos, block)
+               shift = shift + #block
+               carry_end = carry_end + #block
+             end
+
+             -- Mark the originals as moved
+             for _, t in ipairs(tasks) do
+               lines[t.idx + shift] = lines[t.idx + shift]:gsub("%[ %]", "[>]", 1)
+             end
+
+             vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+             update_week_trackers(bufnr)
+             vim.notify(string.format("Moved %d task(s) to %s", #tasks, tgt_name))
+           end
+
+           vim.api.nvim_create_user_command("WeekMoveTasks", function(opts)
+             week_move_tasks(opts.line1, opts.line2)
+           end, { range = true, desc = "Move open tasks in range to next week's Carry-over" })
+
+           vim.keymap.set("x", "<leader>wm", ":WeekMoveTasks<CR>", { silent = true, desc = "Move tasks to next week" })
+           vim.keymap.set("n", "<leader>wm", ":WeekMoveTasks<CR>", { silent = true, desc = "Move task to next week" })
   '';
 }
