@@ -360,5 +360,39 @@
     enable = true;
     settings.theme = "dark";
   };
-  plugins.render-markdown.enable = true;
+  plugins.render-markdown = {
+    enable = true;
+    settings.checkbox.custom = {
+      # [-] = dropped / won't do (overrides the plugin's default "todo" clock)
+      todo = {
+        raw = "[-]";
+        rendered = "󰅖 ";
+        highlight = "RenderMarkdownDropped";
+        scope_highlight = "RenderMarkdownDroppedScope";
+      };
+      # [>] = moved to next week's Carry-over
+      moved = {
+        raw = "[>]";
+        rendered = "󰒊 ";
+        highlight = "RenderMarkdownMoved";
+        scope_highlight = "RenderMarkdownMovedScope";
+      };
+    };
+  };
+
+  # Weekly-planning task states (gruvbox-material palette).
+  # Applied via autocmd because loading the colorscheme clears custom groups.
+  extraConfigLua = ''
+    local function weekly_task_highlights()
+      vim.api.nvim_set_hl(0, "RenderMarkdownMoved", { fg = "#7daea3" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownMovedScope", { fg = "#928374", italic = true })
+      vim.api.nvim_set_hl(0, "RenderMarkdownDropped", { fg = "#928374" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownDroppedScope", { fg = "#928374", strikethrough = true })
+    end
+    weekly_task_highlights()
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      group = vim.api.nvim_create_augroup("WeeklyTaskHighlights", { clear = true }),
+      callback = weekly_task_highlights,
+    })
+  '';
 }
