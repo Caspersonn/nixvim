@@ -14,12 +14,12 @@
   extraConfigLua =
     # lua
     ''
-      local f=io.open( os.getenv( "HOME" ) .. "/git/personal/lkasper-linny","r")
+      local f=io.open( os.getenv( "HOME" ) .. "/git/gh.caspersonn/lkasper-linny","r")
 
       if f~=nil then
         io.close(f)
 
-        vim.g.linny_open_notebook_path = vim.env.HOME .. '/git/personal/lkasper-linny'
+        vim.g.linny_open_notebook_path = vim.env.HOME .. '/git/gh.caspersonn/lkasper-linny'
 
         vim.g.linny_menu_display_docs_count = 1
         vim.g.linny_menu_display_taxo_count = 1
