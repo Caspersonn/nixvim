@@ -23,13 +23,6 @@
         system,
         ...
       }: let
-        nixpkgsConfig = {
-          allowUnfree = true;
-        };
-        pkgsWithConfig = import inputs.nixpkgs {
-          inherit system;
-          config = nixpkgsConfig;
-        };
         nixvimLib = nixvim.lib.${system};
         nixvim' = nixvim.legacyPackages.${system};
         nixvimModule = {
