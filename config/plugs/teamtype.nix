@@ -1,3 +1,0 @@
-{...}: {
-  plugins.teamtype.enable = false;
-}
