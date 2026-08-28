@@ -1,0 +1,5 @@
+{
+  colorscheme.melange = {
+    enable = true;
+  };
+}

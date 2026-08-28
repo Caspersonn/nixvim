@@ -12,7 +12,7 @@
           enable = true;
         };
         ensure_installed = [
-          "markdown"
+          #"markdown"
           "lua"
           "vim"
           "vimdoc"
