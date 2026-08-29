@@ -1,5 +1,5 @@
 {
-  colorscheme.melange = {
+  colorschemes.melange = {
     enable = true;
   };
 }
