@@ -101,6 +101,17 @@
       };
     }
 
+    # img-clip
+    {
+      key = "<leader>ip";
+      action = "<cmd>PasteImage<CR>";
+      mode = "n";
+      options = {
+        silent = true;
+        desc = "Paste image from clipboard";
+      };
+    }
+
     # Git
     {
       key = "<leader>gs";
