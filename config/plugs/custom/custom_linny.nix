@@ -5,8 +5,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "linden-project";
         repo = "linny.vim";
-        rev = "4979b429b206414e002be3af9f17a63d938c81e1";
-        hash = "sha256-JEw5IWdT3wBtXyK3yNWTo26/3YiKTfI6HTxHtHcDW88=";
+        rev = "40673dc93aac5a33247fae631d9f27d348870c11";
+        hash = "sha256-PKu/fPOV9pxwygWkSQRh2jJQWXFIMZFQFXddRRdBG+c=";
       };
     })
   ];
