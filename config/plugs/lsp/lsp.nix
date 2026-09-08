@@ -28,6 +28,8 @@
       };
     };
     preConfig = ''
+      vim.o.winborder = 'rounded'
+
       vim.diagnostic.config({
         virtual_text = false,
         severity_sort = true,
@@ -36,16 +38,6 @@
           source = 'always',
         },
       })
-
-      vim.lsp.handlers['textDocument/hover'] = vim.lsp.buf(
-        vim.lsp.handlers.hover,
-        {border = 'rounded'}
-      )
-
-      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.buf(
-        vim.lsp.handlers.signature_help,
-        {border = 'rounded'}
-      )
     '';
     postConfig = ''
             vim.diagnostic.config({
