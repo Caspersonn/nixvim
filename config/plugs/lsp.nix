@@ -264,7 +264,6 @@
   plugins.cmp-nvim-lsp.enable = true;
   plugins.cmp-buffer.enable = true;
   plugins.cmp-path.enable = true;
-  plugins.cmp-treesitter.enable = true;
   plugins.dap.enable = true;
   plugins.trouble = {
     enable = true;
